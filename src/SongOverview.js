@@ -95,7 +95,7 @@ class SongOverview extends Component {
       };
     }
 
-    console.log("sort button asc clickd");
+    // console.log("sort button asc clickd");
     this.setState(prevState => {
       const updatedSongList = prevState.songs;
       updatedSongList.sort(compareValues("songTitle"));
@@ -125,7 +125,7 @@ class SongOverview extends Component {
       };
     }
 
-    console.log("sort button dsc clickd");
+    // console.log("sort button dsc clickd");
     this.setState(prevState => {
       const updatedSongList = prevState.songs;
       updatedSongList.sort(compareValues("songTitle", "desc"));
@@ -152,8 +152,8 @@ class SongOverview extends Component {
             <SongList songs={this.state.songs} deleteSong={this.deleteSong} />
           </tbody>
         </table>
-        <button onClick={this.sortSongsDsc}>Sort songs dsc</button>
-        <button onClick={this.sortSongsAsc}>Sort songs asc</button>
+        <button onClick={this.sortSongsDsc}>Sort song titles dsc</button>
+        <button onClick={this.sortSongsAsc}>Sort songs titles asc</button>
         <button onClick={this.emptySongList}>Empty Songlist!</button>
       </div>
     );
