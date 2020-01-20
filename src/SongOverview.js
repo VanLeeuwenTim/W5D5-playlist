@@ -50,10 +50,11 @@ class SongOverview extends Component {
 
   addSong(event) {
     event.preventDefault();
-    let targetSongTitle = event.target.songTitle.value;
-    let targetArtist = event.target.artist.value;
-    let targetGenre = event.target.genre.value;
-    let targetRating = event.target.rating.value;
+    const song = event.target;
+    let targetSongTitle = song.songTitle.value;
+    let targetArtist = song.artist.value;
+    let targetGenre = song.genre.value;
+    let targetRating = song.rating.value;
 
     this.setState(prevState => {
       const updatedSongList = prevState.songs;
@@ -71,11 +72,9 @@ class SongOverview extends Component {
 
   emptySongList = () => {
     //console.log('emptySongList button');
-    this.setState(prevState => {
-      return {
-        songs: []
-      };
-    });
+    this.setState(() => ({
+      songs: []
+    }));
   };
 
   deleteSong(event) {
