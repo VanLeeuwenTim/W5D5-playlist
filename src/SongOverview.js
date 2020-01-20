@@ -2,6 +2,26 @@ import React, { Component } from "react";
 import SongForm from "./components/SongForm";
 import SongList from "./components/SongList";
 
+function compareValues(key, order = "asc") {
+  return function innerSort(a, b) {
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+      // property doesn't exist on either object
+      return 0;
+    }
+
+    const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
+    const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
+
+    let comparison = 0;
+    if (varA > varB) {
+      comparison = 1;
+    } else if (varA < varB) {
+      comparison = -1;
+    }
+    return order === "desc" ? comparison * -1 : comparison;
+  };
+}
+
 class SongOverview extends Component {
   constructor() {
     super();
@@ -25,8 +45,7 @@ class SongOverview extends Component {
     };
     this.addSong = this.addSong.bind(this);
     this.deleteSong = this.deleteSong.bind(this);
-    this.sortSongsAsc = this.sortSongsAsc.bind(this);
-    this.sortSongsDsc = this.sortSongsDsc.bind(this);
+    this.sortSongs = this.sortSongs.bind(this);
   }
 
   addSong(event) {
@@ -74,61 +93,11 @@ class SongOverview extends Component {
     });
   }
 
-  sortSongsAsc() {
-    function compareValues(key, order = "asc") {
-      return function innerSort(a, b) {
-        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-          // property doesn't exist on either object
-          return 0;
-        }
-
-        const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
-        const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
-
-        let comparison = 0;
-        if (varA > varB) {
-          comparison = 1;
-        } else if (varA < varB) {
-          comparison = -1;
-        }
-        return order === "desc" ? comparison * -1 : comparison;
-      };
-    }
-
+  sortSongs(order) {
     // console.log("sort button asc clickd");
     this.setState(prevState => {
       const updatedSongList = prevState.songs;
-      updatedSongList.sort(compareValues("songTitle"));
-      return {
-        songs: updatedSongList
-      };
-    });
-  }
-  sortSongsDsc() {
-    function compareValues(key, order = "asc") {
-      return function innerSort(a, b) {
-        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-          // property doesn't exist on either object
-          return 0;
-        }
-
-        const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
-        const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
-
-        let comparison = 0;
-        if (varA > varB) {
-          comparison = 1;
-        } else if (varA < varB) {
-          comparison = -1;
-        }
-        return order === "desc" ? comparison * -1 : comparison;
-      };
-    }
-
-    // console.log("sort button dsc clickd");
-    this.setState(prevState => {
-      const updatedSongList = prevState.songs;
-      updatedSongList.sort(compareValues("songTitle", "desc"));
+      updatedSongList.sort(compareValues("songTitle", order));
       return {
         songs: updatedSongList
       };
@@ -152,8 +121,12 @@ class SongOverview extends Component {
             <SongList songs={this.state.songs} deleteSong={this.deleteSong} />
           </tbody>
         </table>
-        <button onClick={this.sortSongsDsc}>Sort song titles dsc</button>
-        <button onClick={this.sortSongsAsc}>Sort songs titles asc</button>
+        <button onClick={() => this.sortSongs("asc")}>
+          Sort song titles dsc
+        </button>
+        <button onClick={() => this.sortSongs("desc")}>
+          Sort songs titles asc
+        </button>
         <button onClick={this.emptySongList}>Empty Songlist!</button>
       </div>
     );
